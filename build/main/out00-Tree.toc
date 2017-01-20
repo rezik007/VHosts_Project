@@ -1,0 +1,5 @@
+('d:\\programy\\miniconda3\\lib\\site-packages\\urllib3-1.19.1-py3.5.egg',
+ None,
+ {'EGG-INFO', '*.so', '*.py', '*.pyo', '*.pyd', '*.pyc'},
+ 'DATA',
+ [])
