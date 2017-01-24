@@ -1,3 +1,12 @@
+twitter.com
+google.com
+youtube.com
+wordpress.org
+linkedin.com
+instagram.com
+pinterest.com
+wikipedia.org
+hugedomains.com
 adobe.com
 blogspot.com
 wordpress.com
@@ -42,7 +51,6 @@ feedburner.com
 gov.uk
 stumbleupon.com
 secureserver.net
-miibeian.gov.cn
 google.co.jp
 github.com
 parallels.com
@@ -56,7 +64,6 @@ creativecommons.org
 imdb.com
 nih.gov
 huffingtonpost.com
-miitbeian.gov.cn
 weibo.com
 msn.com
 go.com
@@ -104,7 +111,6 @@ dailymail.co.uk
 xing.com
 joomla.org
 dailymotion.com
-delicious.com
 bbb.org
 webs.com
 eepurl.com
@@ -141,7 +147,6 @@ homestead.com
 photobucket.com
 disqus.com
 name.com
-googleusercontent.com
 wired.com
 stanford.edu
 list-manage.com
@@ -226,12 +231,10 @@ clickbank.net
 foursquare.com
 meetup.com
 wufoo.com
-geocities.jp
 ft.com
 loc.gov
 change.org
 sciencedirect.com
-ocn.ne.jp
 domainname.de
 bizjournals.com
 springer.com
@@ -259,7 +262,6 @@ wp.me
 google.com.au
 weather.com
 loopia.se
-cloudfront.net
 gizmodo.com
 irs.gov
 xinhuanet.com
@@ -271,7 +273,6 @@ marriott.com
 people.com.cn
 ustream.tv
 abc.net.au
-linksynergy.com
 prnewswire.com
 wunderground.com
 slate.com
@@ -288,7 +289,6 @@ enable-javascript.com
 list-manage1.com
 newyorker.com
 houzz.com
-jdoqocy.com
 storify.com
 boston.com
 hilton.com
@@ -306,7 +306,6 @@ android.com
 google.pl
 washington.edu
 bola.net
-upenn.edu
 drupal.org
 mozilla.com
 senate.gov
@@ -410,10 +409,7 @@ domeneshop.no
 att.com
 themegrill.com
 paginegialle.it
-nhk.or.jp
 hubspot.com
-admin.ch
-dot.gov
 bls.gov
 teamviewer.com
 onamae.com
@@ -471,7 +467,6 @@ i2i.jp
 g.co
 oreilly.com
 unicef.org
-mhlw.go.jp
 w3schools.com
 java.com
 elsevier.com

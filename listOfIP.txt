@@ -1,10 +1,5 @@
-twitter.com
-twitter.com
-google.com
-youtube.com
-wordpress.org
-linkedin.com
-instagram.com
-pinterest.com
-wikipedia.org
-hugedomains.com
+66.155.40.250
+108.174.10.10
+34.196.179.235
+104.156.81.84
+91.198.174.192

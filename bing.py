@@ -1,3 +1,6 @@
+
+
+
 # -*- coding: utf-8 -*-
 
 __author__ = 'Nop Phoomthaisong (aka @MaYaSeVeN)'
@@ -10,6 +13,8 @@ import re
 import sys
 import optparse
 import socket
+import csv
+import string
 
 
 def main():
@@ -62,6 +67,9 @@ class RevereIP:
         self.http = "http://"
         self.https = "https://"
 
+        # self.convertDomainToIP('abc.txt')
+
+
     def run(self):
 
         if self.file:
@@ -71,6 +79,11 @@ class RevereIP:
             ip_or_domain = self.ips_or_domains.pop()
             self.reverse_ip(ip_or_domain)
             self.log("[*] You got " + str(self.domain_numbers) + " domains to hack.")
+            fileHandler = open('bindLog.txt', 'a')
+            fileHandler.write(str(self.domain_numbers)+'\n')
+            fileHandler.close()
+
+
             self.domains = []
 
     def file_opener(self):
@@ -82,6 +95,25 @@ class RevereIP:
         except IOError:
             self.log("[-] Error: File does not appear to exist.")
             exit(1)
+    def convertDomainToIP(self, file):
+            fileHandler = open(file, "r").read()
+            fileHandler2 = open("abc3.txt", 'a+')
+            temp = str.split(fileHandler,'\n')
+            for i in temp:
+                fileHandler2.write(i+','+socket.gethostbyname(i)+'\n')
+    def checkDomainName(self):
+        fileHandler = open('bindLog.txt','r').readlines()
+        result = []
+        resultFinal = []
+        x=0
+        for i in fileHandler:
+            result.append(str.split(i,','))
+        for i in range(0,len(result)):
+            resultFinal.append(socket.gethostbyaddr('216.239.38.21'))
+            x+=1
+        print resultFinal
+
+
 
     def reverse_ip(self, ip_or_domain):
         raw_domains_temp = []
@@ -97,6 +129,10 @@ class RevereIP:
 
         query = "IP:" + ip
         self.log("\n[*] Host: " + ip + " " + name)
+        fileHandler = open('bindLog.txt', 'a')
+        fileHandler.write(ip+',')
+        fileHandler.close()
+
 
         self.count = 0
         while 1:
@@ -137,11 +173,11 @@ class RevereIP:
         user_agent = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; FDM; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 1.1.4322)'
         credentials = (':%s' % self.api_key).encode('base64')[:-1]
         auth = 'Basic %s' % credentials
-        url = 'https://api.datamarket.azure.com/Bing/SearchWeb/v1/Web?Query=%27' + query + '%27&$format=json' + '&$skip=' + str(
-            self.count)
+        url = 'https://api.cognitive.microsoft.com/bing/v5.0/search?q='+query+'&responseFilter=webpages'
         request = urllib2.Request(url)
-        request.add_header('Ocp-apim-subscription-key', '99863f45a0fe4d8ea133cbbc6b3dff94')
         request.add_header('Authorization', auth)
+        request.add_header('Host', 'api.cognitive.microsoft.com')
+        request.add_header('Ocp-Apim-Subscription-Key', 'a7a778df2bc446a2880ff46173339d02')
         request.add_header('User-Agent', user_agent)
         request_opener = urllib2.build_opener()
         try:
@@ -161,12 +197,12 @@ class RevereIP:
         response_data = response.read()
         json_result = json.loads(response_data)
         result_list = json_result
-        if len(result_list['d']['results']) == 0:
+        if not 'webPages' in result_list:
             return -1
 
-        for i in range(len(result_list['d']['results'])):
+        for i in range(len(result_list['webPages']['value'])):
             protocol_domain_port = []
-            domain = result_list['d']['results'][i]['DisplayUrl']
+            domain = result_list['webPages']['value'][i]['displayUrl']
             if self.https in domain:
                 protocol_domain_port.append("https://")
                 port = ':443'
