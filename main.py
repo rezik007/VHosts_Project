@@ -48,7 +48,7 @@ class Application(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         databaseOfDomains = np.genfromtxt(r'top500domains.csv', dtype='U',skip_header=1, delimiter=',', usecols=(1,))
         databaseOfRootDomains = np.genfromtxt(r'top500domains.csv', dtype='U',skip_header=1, delimiter=',', usecols=(2,))
 
-        for i in range(60, 70):
+        for i in range(80, 90):
             requestOneAuto = requests.get("http://reverseip.logontube.com/?url="+databaseOfDomains[i]+"&output=json")
             requestOneAuto.raise_for_status()
             jsonRead = json.loads(requestOneAuto.content.decode('utf-8'))

@@ -12,6 +12,7 @@ import json
 import sys
 import optparse
 import socket
+import csv
 
 
 
@@ -52,6 +53,7 @@ def stdout(log):
 
 
 class RevereIP:
+
     def __init__(self, args, key, recheck):
         self.domains = [0]
         self.domain_numbers = 0
@@ -63,9 +65,9 @@ class RevereIP:
         self.http = "http://"
         self.https = "https://"
         self.mainFile = open("bing.txt",'a')
-        self.mainFileRead = open("newListOfIP.txt", 'r').read().split('\n');
+        self.mainFileRead = open("newListOfIP.txt", 'r').read().split('\n')
         self.mainFileRead.pop()
-        self.results = [0]*101
+        self.results = [0]*len(self.mainFileRead)
 
         # self.convertDomainToIP('abc.txt')
 
@@ -78,18 +80,18 @@ class RevereIP:
             self.domain_numbers = 0
             ip_or_domain = self.results.pop()
             host_name = self.mainFileRead.pop()
-            self.mainFile.write(host_name+","+ip_or_domain+",")
+            self.mainFile.write(host_name+","+str(ip_or_domain)+",")
             self.reverse_ip(ip_or_domain)
             self.log("[*] You got " + str(self.domain_numbers) + " domains to hack.")
             if self.domain_numbers>0:
                 self.mainFile.write(str(self.domain_numbers) + ",")
-                list(map(str, self.domains))
-                # TODO: mapowanie nie działa a w niektorych kolumnach z adresami jest unicode ('u), wywala to pętle for. jakoś trzeba to poprawić
-                for i in range(0, len(self.domains)):
-                    self.mainFile.write(str(self.domains[i][1])+" + ")
+                # list(map(str, self.domains))
+                for i in range(1, len(self.domains)):
+                    self.mainFile.write(self.domains[i][1]+" + ")
                 self.mainFile.write("\n")
             else:
                 self.mainFile.write(str(self.domain_numbers) + "\n")
+            # self.mainFile.write(str(self.domain_numbers) + ","+ str(self.domains)+"\n")
 
 
             self.domains = []
@@ -121,8 +123,8 @@ class RevereIP:
         raw_domains_temp = []
         ip = ip_or_domain
 
-        query = "IP:" + ip
-        self.log("\n[*] Host: " + ip)
+        query = "IP:" + str(ip)
+        self.log("\n[*] Host: " + str(ip))
 
         self.count = 0
         while 1:
