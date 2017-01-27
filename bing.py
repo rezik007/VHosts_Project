@@ -9,12 +9,10 @@ __version__ = 'reverseIP version 1.0 ( http://mayaseven.com )'
 import urllib
 import urllib2
 import json
-import re
 import sys
 import optparse
 import socket
-import csv
-import string
+
 
 
 def main():
@@ -45,7 +43,7 @@ you need to..
     key = options.key
     recheck = options.disable
     file = options.file
-    reverseIP = RevereIP(args, key, recheck, file)
+    reverseIP = RevereIP(args, key, recheck)
     reverseIP.run()
 
 
@@ -54,85 +52,77 @@ def stdout(log):
 
 
 class RevereIP:
-    def __init__(self, args, key, recheck, file):
-        self.domains = []
+    def __init__(self, args, key, recheck):
+        self.domains = [0]
         self.domain_numbers = 0
         self.final_result = {}
-        self.ips_or_domains = set(args)
         self.api_key = key
         self.count = 0
         self.log = stdout
         self.recheck = recheck
-        self.file = file
         self.http = "http://"
         self.https = "https://"
+        self.mainFile = open("bing.txt",'a')
+        self.mainFileRead = open("newListOfIP.txt", 'r').read().split('\n');
+        self.mainFileRead.pop()
+        self.results = [0]*101
 
         # self.convertDomainToIP('abc.txt')
 
 
     def run(self):
 
-        if self.file:
-            self.ips_or_domains = self.file_opener()
-        while self.ips_or_domains:
+        self.file_opener()
+
+        while self.results:
             self.domain_numbers = 0
-            ip_or_domain = self.ips_or_domains.pop()
+            ip_or_domain = self.results.pop()
+            host_name = self.mainFileRead.pop()
+            self.mainFile.write(host_name+","+ip_or_domain+",")
             self.reverse_ip(ip_or_domain)
             self.log("[*] You got " + str(self.domain_numbers) + " domains to hack.")
-            fileHandler = open('bindLog.txt', 'a')
-            fileHandler.write(str(self.domain_numbers)+'\n')
-            fileHandler.close()
+            if self.domain_numbers>0:
+                self.mainFile.write(str(self.domain_numbers) + ",")
+                list(map(str, self.domains))
+                # TODO: mapowanie nie działa a w niektorych kolumnach z adresami jest unicode ('u), wywala to pętle for. jakoś trzeba to poprawić
+                for i in range(0, len(self.domains)):
+                    self.mainFile.write(str(self.domains[i][1])+" + ")
+                self.mainFile.write("\n")
+            else:
+                self.mainFile.write(str(self.domain_numbers) + "\n")
 
 
             self.domains = []
 
+        self.mainFile.close()
+
     def file_opener(self):
+        k=0
         try:
-            file = open(self.file, "r").read()
-            find_ip = re.findall(r'[0-9]+(?:\.[0-9]+){3}', file)
-            ipl = set(find_ip)
-            return ipl
+            file = open("newListOfIP.txt", "r")
+            for i in file:
+                i = i.replace('\n','')
+                self.results[k] = socket.gethostbyname(i)
+                k+=1
+            return  self.results
         except IOError:
             self.log("[-] Error: File does not appear to exist.")
             exit(1)
+
     def convertDomainToIP(self, file):
             fileHandler = open(file, "r").read()
             fileHandler2 = open("abc3.txt", 'a+')
             temp = str.split(fileHandler,'\n')
             for i in temp:
                 fileHandler2.write(i+','+socket.gethostbyname(i)+'\n')
-    def checkDomainName(self):
-        fileHandler = open('bindLog.txt','r').readlines()
-        result = []
-        resultFinal = []
-        x=0
-        for i in fileHandler:
-            result.append(str.split(i,','))
-        for i in range(0,len(result)):
-            resultFinal.append(socket.gethostbyaddr('216.239.38.21'))
-            x+=1
-        print resultFinal
-
 
 
     def reverse_ip(self, ip_or_domain):
         raw_domains_temp = []
-        name, ip = self.convert_domain_to_ip(ip_or_domain)
-        if not ip:
-            return
-        if self.check_ip_in_cloudflare(ip):
-            if name is not "":
-                self.log("\n[-] " + name + " hiding behind Cloudflare.")
-                return
-            self.log("[-] It's Cloudflare IP Address.")
-            return
+        ip = ip_or_domain
 
         query = "IP:" + ip
-        self.log("\n[*] Host: " + ip + " " + name)
-        fileHandler = open('bindLog.txt', 'a')
-        fileHandler.write(ip+',')
-        fileHandler.close()
-
+        self.log("\n[*] Host: " + ip)
 
         self.count = 0
         while 1:
@@ -150,22 +140,7 @@ class RevereIP:
                     if l[1] not in self.domains:
                         self.log("[+] " + ''.join(l).encode('utf8'))
                         self.domains.append(l)
-                self.final_result.update({ip: self.domains})
                 self.domain_numbers = len(self.domains)
-
-    def convert_domain_to_ip(self, ip_or_domain):
-        name = ""
-        if not re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ip_or_domain):
-            try:
-                name = ip_or_domain
-                ip = socket.gethostbyname(ip_or_domain)
-                return name, ip
-            except socket.gaierror:
-                self.log("\n[-] unable to get address for " + ip_or_domain)
-                self.domain_numbers = 0
-                ip = None
-                return name, ip
-        return name, ip_or_domain
 
     def bing_call_api(self, query):
         domains = []
@@ -234,6 +209,7 @@ class RevereIP:
                 continue
             if ipc == ip:
                 self.log("[+] " + ''.join(l).encode('utf8'))
+
             else:
                 self.log("[!] " + ''.join(l).encode('utf8') + " is on the other IP address, please recheck it by hand.")
                 continue
